@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: java-db-test
+#   datasource:
+#     url: jdbc:h2:mem:test;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+#     driver-class-name: org.h2.Driver
+#     username: sa
+#     password:
+#   h2:
+#     console:
+#       enabled: true
+#       path: /h2-console
+#   sql:
+#     init:
+#       mode: embedded
+#       encoding: UTF-8
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo/sys?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
