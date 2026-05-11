@@ -8,7 +8,6 @@ import redis.clients.jedis.ConnectionPoolConfig;
 import redis.clients.jedis.RedisClient;
 
 @Configuration
-@Order(2)
 public class RedisConfig {
     @Value("${redis.host}")
     private String host;
