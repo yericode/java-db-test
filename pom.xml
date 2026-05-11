@@ -74,6 +74,14 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>7.5.0</version>
+			<scope>compile</scope>
+		</dependency>
 		
 		<!-- Spring JDBC -->
 		<dependency>
@@ -89,6 +97,10 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mysql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.redis</groupId>
+			<artifactId>testcontainers-redis</artifactId>
 		</dependency>
 
 	</dependencies>

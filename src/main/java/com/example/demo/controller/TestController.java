@@ -1,22 +1,32 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
+import com.example.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.RedisClient;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
-import com.example.demo.entity.User;
+import java.util.List;
 
 @RestController
 public class TestController {
 
   @Autowired
   private JdbcClient jdbcClient;
+
+  @Autowired
+  @Qualifier("redisClient")
+  private RedisClient redis;
+
+  @Autowired
+  private ObjectMapper mapper;
 
   @GetMapping("/")
   public String test() {
@@ -25,17 +35,35 @@ public class TestController {
 
   @GetMapping("/users")
   public List<User> getAllUser() {
-    return jdbcClient.sql("SELECT * FROM USERS")
+    String key = "users:all";
+    String value = redis.get(key);
+
+    if (value != null && !value.isBlank()) {
+      return mapper.readValue(value, new TypeReference<>() {});
+    }
+
+    List<User> users = jdbcClient.sql("SELECT * FROM USERS")
         .query(User.class)
         .list();
+    redis.set(key, mapper.writeValueAsString(users));
+    return users;
   }
 
   @GetMapping("/users/{userId}")
   public User getUserById(@PathVariable Long userId) {
-    return jdbcClient.sql("SELECT * FROM USERS WHERE ID = :userId")
+    String key = "users:id:" + userId;
+    String value = redis.get(key);
+
+    if (value != null && !value.isBlank()) {
+      return mapper.readValue(value, User.class);
+    }
+
+    User user = jdbcClient.sql("SELECT * FROM USERS WHERE ID = :userId")
         .param("userId", userId)
         .query(User.class)
         .single();
+    redis.set(key, mapper.writeValueAsString(user));
+    return user;
   }
 
   @PostMapping("/users")
