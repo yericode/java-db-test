@@ -28,3 +28,12 @@ spring:
     init:
       mode: always
       encoding: UTF-8
+  data:
+    redis:
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 50       # max connections
+          max-idle: 10         # max idle connections
+          min-idle: 5          # min idle connections
+          max-wait: 2000ms     # wait time before exception

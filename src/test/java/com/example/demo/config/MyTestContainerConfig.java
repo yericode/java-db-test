@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistrar;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -24,12 +25,18 @@ public class MyTestContainerConfig {
     }
 
     @Bean
-    public RedisContainer redisContainer() {
-        return new RedisContainer("redis:7").withExposedPorts(6379);
+//    @ServiceConnection
+    public GenericContainer<?> redisContainer() {
+        return new GenericContainer<>(DockerImageName.parse("redis:7")).withExposedPorts(6379);
     }
 
+//    @Bean
+//    public RedisContainer redisContainer() {
+//        return new RedisContainer("redis:7").withExposedPorts(6379);
+//    }
+
     @Bean
-    public DynamicPropertyRegistrar redisProperties(RedisContainer redisContainer) {
+    public DynamicPropertyRegistrar redisProperties(GenericContainer<?> redisContainer) {
         return (properties) -> {
             properties.add("redis.host", redisContainer::getHost);
             properties.add("redis.port", redisContainer::getFirstMappedPort);

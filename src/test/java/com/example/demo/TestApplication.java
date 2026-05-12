@@ -8,7 +8,7 @@ import com.example.demo.config.MyTestContainerConfig;
 @SpringBootTest
 public class TestApplication {
   public static void main(String[] args) {
-//    SpringApplication.from(Application::main).with(MyTestContainerConfig.class).run(args);
+   SpringApplication.from(Application::main).with(MyTestContainerConfig.class).run(args);
   }
   
 }

@@ -3,7 +3,6 @@ package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import redis.clients.jedis.ConnectionPoolConfig;
 import redis.clients.jedis.RedisClient;
 

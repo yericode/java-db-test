@@ -25,6 +25,9 @@ public class TestController {
   @Qualifier("redisClient")
   private RedisClient redis;
 
+//  @Autowired
+//  private StringRedisTemplate redisTemplate;
+
   @Autowired
   private ObjectMapper mapper;
 
