@@ -45,7 +45,7 @@ public class TestController {
 //      return mapper.readValue(value, new TypeReference<>() {});
 //    }
 
-    List<User> users = jdbcClient.sql("SELECT * FROM USERS")
+    List<User> users = jdbcClient.sql("SELECT * FROM users")
         .query(User.class)
         .list();
 //    redis.set(key, mapper.writeValueAsString(users));
@@ -61,7 +61,7 @@ public class TestController {
 //      return mapper.readValue(value, User.class);
 //    }
 
-    User user = jdbcClient.sql("SELECT * FROM USERS WHERE ID = :userId")
+    User user = jdbcClient.sql("SELECT * FROM users WHERE ID = :userId")
         .param("userId", userId)
         .query(User.class)
         .single();
@@ -71,7 +71,7 @@ public class TestController {
 
   @PostMapping("/users")
   public String addUser(@RequestBody User user) {
-    jdbcClient.sql("INSERT INTO USERS(NAME, EMAIL, PHONE, AGE) VALUES(:name, :email, :phone, :age)")
+    jdbcClient.sql("INSERT INTO users(name, email, phone, age) VALUES(:name, :email, :phone, :age)")
       .param("name", user.getName())
       .param("email", user.getEmail())
       .param("phone", user.getPhone())
