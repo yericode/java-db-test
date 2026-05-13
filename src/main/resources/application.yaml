@@ -3,37 +3,47 @@ server:
 spring:
   application:
     name: java-db-test
-#   datasource:
-#     url: jdbc:h2:mem:test;MODE=MySQL;DATABASE_TO_LOWER=TRUE
-#     driver-class-name: org.h2.Driver
-#     username: sa
-#     password:
-#   h2:
-#     console:
-#       enabled: true
-#       path: /h2-console
-#   sql:
-#     init:
-#       mode: embedded
-#       encoding: UTF-8
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      idle-timeout: 300000
-      max-lifetime: 1800000
-      connection-timeout: 30000
+#    url: jdbc:h2:mem:test;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
+    url: jdbc:tc:mysql:8.0:///testdb?serverTimezone=Asia/Taipei&characterEncoding=UTF-8
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
   sql:
     init:
-      mode: always
+      mode: never
       encoding: UTF-8
-  data:
-    redis:
-      lettuce:
-        pool:
-          enabled: true
-          max-active: 50       # max connections
-          max-idle: 10         # max idle connections
-          min-idle: 5          # min idle connections
-          max-wait: 2000ms     # wait time before exception
+  flyway:
+    clean-disabled: true # prod 環境一定要設，flyway clean 指令會刪除所有資料
+    table: flyway_schema_history # 自動建立的歷史紀錄表名稱
+    enabled: true # 是否開啟 flyway 功能(預設就是開)
+    locations: classpath:migration # SQL 腳本放的位置
+    baseline-on-migrate: true # 若已有既有資料庫，開啟既有版本開始更新，baseline-version 可以指定哪一版後開始套用
+    schemas: test # 資料庫下哪一個 schema
+    placeholders: # 這裡可以定義一些寫在 SQL 腳本中的替換參數，例如 SCHEMA: metadata => create table ${SCHEMA} (...)
+      mode: mysql
+#  datasource:
+#    hikari:
+#      maximum-pool-size: 20
+#      minimum-idle: 5
+#      idle-timeout: 300000
+#      max-lifetime: 1800000
+#      connection-timeout: 30000
+#  sql:
+#    init:
+#      mode: always
+#      encoding: UTF-8
+#  data:
+#    redis:
+#      lettuce:
+#        pool:
+#          enabled: true
+#          max-active: 50       # max connections
+#          max-idle: 10         # max idle connections
+#          min-idle: 5          # min idle connections
+#          max-wait: 2000ms     # wait time before exception
