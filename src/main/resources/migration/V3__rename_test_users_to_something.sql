@@ -1,1 +1,0 @@
-alter table users rename to something;

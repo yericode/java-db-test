@@ -1,0 +1,2 @@
+alter table users rename to something;
+-- alter table nothing rename to elsething;
