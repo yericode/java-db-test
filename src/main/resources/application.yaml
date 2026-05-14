@@ -1,6 +1,13 @@
+redis:
+  host: ${ADDR_REDIS_6379_HOST:localhost}
+  port: ${ADDR_REDIS_6379_PORT:6379}
+
 server:
   port: 8080
 spring:
+  docker:
+    compose:
+      file: ../docker-compose.dev.yml
   application:
     name: java-db-test
   datasource:
@@ -8,8 +15,8 @@ spring:
 #    driver-class-name: org.h2.Driver
 #    username: sa
 #    password:
-    url: jdbc:tc:mysql:8.0:///testdb?serverTimezone=Asia/Taipei&characterEncoding=UTF-8
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+#    url: jdbc:tc:mysql:8.0:///testdb?serverTimezone=Asia/Taipei&characterEncoding=UTF-8
+#    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   h2:
     console:
       enabled: false
@@ -24,7 +31,7 @@ spring:
     enabled: true # 是否開啟 flyway 功能(預設就是開)
     locations: classpath:migration # SQL 腳本放的位置
     baseline-on-migrate: true # 若已有既有資料庫，開啟既有版本開始更新，baseline-version 可以指定哪一版後開始套用
-    schemas: test # 資料庫下哪一個 schema
+    schemas: demo # 資料庫下哪一個 schema
     placeholders: # 這裡可以定義一些寫在 SQL 腳本中的替換參數，例如 SCHEMA: metadata => create table ${SCHEMA} (...)
       mode: mysql
 #  datasource:

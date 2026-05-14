@@ -1,0 +1,35 @@
+version: "3.8"
+name: java-db-test
+services:
+  test-db-mysql:
+    image: mysql:8.0
+    container_name: test-db-mysql
+    restart: no
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: demo
+    ports:
+      - '3306' # 不寫宿主機的特定 port 就會自動隨機映射，框架會自動處理 datasource
+    labels:
+      org.springframework.boot.service-connection: mysql # 這裡寫 label 是必要的嗎?
+  test-db-redis:
+    image: redis:7.0-alpine
+    container_name: test-db-redis
+    restart: no
+    ports:
+      - '6379'
+    labels:
+      org.springframework.boot.service-connection: redis
+      # 告訴 Spring Boot：把這個服務的 Host 和 Port 寫入指定的環境變數
+      org.springframework.boot.readiness-check.tcp.disable: "true"
+  test-db-backend:
+    # 預計這裡是後端本身的打包，本機測試時不應該啟動
+    ports:
+      - '8080:8080'
+    depends_on:
+      - test-db-mysql
+      - test-db-redis
+    labels:
+      org.springframework.boot.ignore: true

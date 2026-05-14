@@ -21,9 +21,9 @@ public class TestController {
   @Autowired
   private JdbcClient jdbcClient;
 
-//  @Autowired
-//  @Qualifier("redisClient")
-//  private RedisClient redis;
+ @Autowired
+ @Qualifier("redisClient")
+ private RedisClient redis;
 
 //  @Autowired
 //  private StringRedisTemplate redisTemplate;
@@ -38,34 +38,34 @@ public class TestController {
 
   @GetMapping("/users")
   public List<User> getAllUser() {
-//    String key = "users:all";
-//    String value = redis.get(key);
-//
-//    if (value != null && !value.isBlank()) {
-//      return mapper.readValue(value, new TypeReference<>() {});
-//    }
+   String key = "users:all";
+   String value = redis.get(key);
+
+   if (value != null && !value.isBlank()) {
+     return mapper.readValue(value, new TypeReference<>() {});
+   }
 
     List<User> users = jdbcClient.sql("SELECT * FROM users")
         .query(User.class)
         .list();
-//    redis.set(key, mapper.writeValueAsString(users));
+   redis.set(key, mapper.writeValueAsString(users));
     return users;
   }
 
   @GetMapping("/users/{userId}")
   public User getUserById(@PathVariable Long userId) {
-//    String key = "users:id:" + userId;
-//    String value = redis.get(key);
+   String key = "users:id:" + userId;
+   String value = redis.get(key);
 
-//    if (value != null && !value.isBlank()) {
-//      return mapper.readValue(value, User.class);
-//    }
+   if (value != null && !value.isBlank()) {
+     return mapper.readValue(value, User.class);
+   }
 
     User user = jdbcClient.sql("SELECT * FROM users WHERE ID = :userId")
         .param("userId", userId)
         .query(User.class)
         .single();
-//    redis.set(key, mapper.writeValueAsString(user));
+   redis.set(key, mapper.writeValueAsString(user));
     return user;
   }
 
