@@ -1,13 +1,12 @@
-redis:
-  host: ${ADDR_REDIS_6379_HOST:localhost}
-  port: ${ADDR_REDIS_6379_PORT:6379}
-
 server:
   port: 8080
 spring:
   docker:
     compose:
-      file: ../docker-compose.dev.yml
+      file: docker-compose.dev.yml
+      lifecycle-management: start-only # 控制容器與程式怎麼搭配，none 停用功能手動起 compose，start-only 啟動時跟著起 compose 但關閉不理，start-and-stop 一起啟動關閉
+      # profiles: # 可以設定不同環境對應 docker compose 設定文件
+      #   active: 
   application:
     name: java-db-test
   datasource:
